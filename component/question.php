@@ -1,0 +1,296 @@
+<?php
+session_start();
+if (isset($_SESSION["ROLE"])) {
+    if ($_SESSION["ROLE"] == 'admin') {
+        session_abort();
+
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+            <!-- Latest compiled JavaScript -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+            <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+            <style>
+                .content {
+                    position: relative;
+                    border: 2px solid green;
+                    width: 750px;
+                    height: 450px;
+                    margin: 50px auto;
+                    background-color: whitesmoke;
+                }
+
+                h3,
+                h4 {
+                    background-color: #212529;
+                    color: red;
+                    text-align: center;
+                    padding: 5px;
+                }
+
+                .question-content {
+                    text-align: center;
+                }
+
+                #question {
+                    width: 90%;
+                    margin: 15px;
+                    background-color: whitesmoke;
+                    border: 0px;
+                }
+
+                div.option {
+                    /* background-color: lightblue; */
+                    border-radius: 15px;
+                    margin: 10px 0;
+                }
+
+                #submitQuestion {
+                    margin: 15px 15px;
+                    padding: 7px;
+                    border-radius: 10px;
+                    background-color: green;
+                    border: 3px solid #212529;
+                    color: white;
+                }
+
+                textarea {
+                    max-height: 150px;
+                }
+
+                th,
+                td {
+                    padding: 10px;
+                }
+
+                td {
+                    font-size: 15px;
+                    border: 2px solid black;
+                    margin: 15px;
+                }
+
+                th {
+                    font-size: 15px;
+                    color: red;
+                    background-color: aqua;
+                }
+
+                #del,
+                #chng,
+                #correctans {
+                    padding: 0;
+                    font-size: 10px;
+                    background-color: red;
+                    color: white;
+                    padding: 5px;
+                    border-radius: 25px;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+
+        <body>
+
+            <?php
+            include("navbar.php");
+            ?>
+            <?php
+            if (isset($_SESSION["ROLE"])) {
+                if ($_SESSION["ROLE"] == "admin") {
+                    ?>
+                    <div class="content">
+                        <h3 class="text-white">Add Questions</h3>
+                        <div class="question-content">
+                            <textarea name="question" id="question" cols="50" rows="5" placeholder="Add Question Here...."
+                                fixed></textarea>
+                        </div>
+                        <h4 class="text-white">Add Options</h4>
+                        <div class="container me-auto ms-auto options me-auto ms-auto">
+                            <div class="input-group w-50 option">
+                                <input type="radio" class="ms-3 me-3 input-group-radio ans" name="option"></input>
+                                <input type="text" class="form-control opt" placeholder="option">
+                            </div>
+                            <div class="input-group w-50 option">
+                                <input type="radio" class="me-3 ms-3 input-group-radio ans" name="option"></input>
+                                <input type="text" class="form-control opt" placeholder="option">
+                            </div>
+                        </div>
+                        <button id="submitQuestion">Add Question</button>
+                    </div>
+                    <table border="1" width="100%" class="tab table-bordered" id="myTable">
+                        <tbody id="innerTable">
+                        </tbody>
+                    </table>
+                    <?php
+
+                }
+            }
+            ?>
+            <script>
+                $(document).ready(function () {
+                    function fetchAllData() {
+                        $.ajax({
+                            type: "GET",
+                            url: "/quizapp/classes/AjaxRequestClass.php",
+                            data:{action:'fetchAllAjax'},
+                            success: function (response) {
+                                $("#innerTable").html(response);
+
+                            }
+                        });
+
+
+                    }
+                    fetchAllData();
+                    $(document).on('click', '#submitQuestion', function () {
+                        let question = $("#question").val();
+                        let options = $(".opt")
+                        let answers = $(".ans")
+                        let allOptions = [];
+                        let rightAnswer = undefined;
+                        for (let i = 0; i < options.length; i++) {
+                            allOptions.push($(options[i]).val())
+                        }
+                        let i = 0;
+                        Array.from(answers).forEach((element) => {
+                            if (element.checked) {
+                                rightAnswer = allOptions[i]
+                            }
+                            i++;
+                        })
+                        if (rightAnswer) {
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/quizapp/classes/AjaxRequestClass.php",
+                                data: { uquestion: question, opts: allOptions, rightans: rightAnswer,action:'addQuestionAjax' },
+                                success: function (response) {
+                                   window.location.reload()
+                                    fetchAllData();
+                                }
+                            });
+                        }
+                        else {
+                            alert("Answer Required !!");
+                        }
+
+                    })
+                    $(document).on('click', '#add', function () {
+                        let qid = $(this).data("id");
+                        let flag = ($(this).parent().children().first().is(':checked'))
+                        let data = $($(this).parent().children()[1]).val();
+                        data = data.trim();
+                        if (data=="" || data== null)
+                        {
+                            alert("Value Can Not Be Empty !!");
+                        } else {
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/quizapp/classes/AjaxRequestClass.php",
+                                data: { qid: qid, flag: flag, data: data ,action:'addOptionAjax'},
+                                success: function (response) {
+                                    alert("Option Value Added.")
+                                    fetchAllData();
+    
+                                }
+                            });
+                        }
+
+
+                    })
+                    $(document).on('click', '#del', function () {
+                        let qid = $(this).data("id");
+                        let data = $($(this).parent().children()[0]).text();
+                        data = data.trim();
+                        $.ajax({
+                            type: "POST",
+                            url: "/quizapp/classes/AjaxRequestClass.php",
+                            data: { qid: qid, data: data,action:'deleteOptionAjax' },
+                            success: function (response) {
+                                if (response == "You Can Not Delete Answer .") {
+                                    alert(response)
+                                }
+                                else if (response == "Minimum Two Option Required .") {
+                                    alert(response)
+                                }
+                                else {
+                                    alert(response)
+                                    fetchAllData();
+                                }
+
+                            }
+                        });
+
+
+                    })
+                    $(document).on('click', '#chng', function () {
+                        let qid = $(this).data("id");
+                        let data = $($(this).parent().children()[0]).text();
+                        data = data.trim();
+                        let newOptionVal = prompt("Enter Value");
+                        if(data == "" ||data == null){
+
+                            alert("New Value Can Not Be Empty !!");
+                            
+                        }else {
+                            
+                            $.ajax({
+                                type: "POST",
+                                url: "/quizapp/classes/AjaxRequestClass.php",
+                                data: { qid: qid, data: data, newoption: newOptionVal, action:'changeAnsValueAjax' },
+                                success: function (response) {
+                                    if (response == "Option Changed.") {
+                                        alert(response)
+                                        fetchAllData()
+                                    }
+    
+                                }
+                            });
+
+                        }
+                    })
+                    $(document).on('click', "#correctans", function () {
+                        let qid = $(this).data("id");
+                        let data = $($(this).parent().children()[0]).text();
+                        data = data.trim();
+                        $.ajax({
+                            type: "POST",
+                            url: "/quizapp/classes/AjaxRequestClass.php",
+                            data: { qid: qid, data: data ,action:'changeAnsAjax'},
+                            success: function (response) {
+                                if (response == "Answer Updated.") {
+                                    alert(response)
+                                    fetchAllData()
+                                }
+
+                            }
+                        });
+
+                    })
+                })
+            </script>
+
+        </body>
+
+        </html>
+
+        <?php
+    }
+    else {
+        
+        header("Location:/quizapp/index.php", true);
+    }
+} else {
+    header("Location:/quizapp/component/loginpage.php", true);
+}
+?>
