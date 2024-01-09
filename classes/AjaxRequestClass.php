@@ -159,5 +159,5 @@ class Ajax extends Quiz
 }
 $connObj = new DataBase("localhost","vraj","","quiz");
 $ajaxObj = new Ajax($connObj);
-// Comment
+// Comment Added
 ?>
