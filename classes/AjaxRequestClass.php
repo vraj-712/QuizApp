@@ -124,7 +124,7 @@ class Ajax extends Quiz
 
             echo $this->changeOptionValue($temp, $user_qid, $user_data, $user_new_opt);
     }
-    public function addUserAjax(){ $this->addUser($this->connObj); }
+    public function addUserAjax(){ $this->addUser( $this->connObj ); }
 
     public function checkQuizAjax(){
 
