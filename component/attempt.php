@@ -1,7 +1,6 @@
 <?php
-session_start();
+include("navbar.php");
 if (isset($_SESSION["ROLE"]) ) {
-    session_abort();
     ?>
 
     <!DOCTYPE html>
@@ -23,7 +22,7 @@ if (isset($_SESSION["ROLE"]) ) {
             left: 50%;
             transform: translate(-50%, -50%);
             width: 80%;
-            border: 2px solid black;
+            border: 2px solid #414a4c;
             padding: 15px;
         }
 
@@ -32,11 +31,11 @@ if (isset($_SESSION["ROLE"]) ) {
             font-size: 20px;
             background-color: green;
             text-align: center;
-            border: 3px solid black;
+            border: 3px solid #414a4c;
             width: 100%;
             border-radius: 25px;
             width: 30%;
-            box-shadow:4px 5px 10px black;
+            box-shadow:4px 5px 10px #414a4c;
         }
 
         div.content>div {
@@ -57,7 +56,7 @@ if (isset($_SESSION["ROLE"]) ) {
             font-weight: bold;
             border-radius: 25px;
             background-color: gray;
-            border: 5px solid black;
+            border: 5px solid #414a4c;
         }
 
         #next {
@@ -93,7 +92,7 @@ if (isset($_SESSION["ROLE"]) ) {
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            border: 2px solid black;
+            border: 2px solid #414a4c;
         }
 
         .result-container h1 {
@@ -108,15 +107,16 @@ if (isset($_SESSION["ROLE"]) ) {
             /* margin-top: 50px; */
             background-color: green;
             color: white;
-            border: 3px solid black;
+            border: 3px solid #414a4c;
             font-size: 22px;
         }
     </style>
 
+    </style>
+
     </head>
-    <body>
         <?php
-        include("navbar.php");
+        
         
         if (isset($_SESSION["ROLE"])) {
             ?>
@@ -151,6 +151,7 @@ if (isset($_SESSION["ROLE"]) ) {
                 <h1 class="text-center" id="result">Result</h1>
                 <button id="restatQuiz">Restart</button>
             </div>
+  
             <?php
         }
         ?>
@@ -307,6 +308,7 @@ if (isset($_SESSION["ROLE"]) ) {
                         url: "/quizapp/classes/AjaxRequestClass.php",
                         data: { user_result: temparr ,action:'checkQuizAjax'},
                         success: function (response) {
+                            console.log(response)
                             $(".content").css("display", "none")
                             $(".result-container").css("display", "block");
                             $("#result").text("Result : " + response + "/10");
@@ -331,6 +333,7 @@ if (isset($_SESSION["ROLE"]) ) {
 
                     return array;
                 }
+
             })
         </script>
 

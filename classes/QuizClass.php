@@ -23,7 +23,7 @@ class Quiz
     {
         ob_start();
         ?>
-        <tr style='border:5px solid black;'>
+        <tr>
             <th>Question No</th>
             <th>Question</th>
             <th>Option1</th>
@@ -36,9 +36,9 @@ class Quiz
 
         foreach ($arr as $row) {
             ?>
-            <tr style='border:5px solid black;'>
+            <tr>
                 <td><?php echo $row["qno"] ?></td>
-                <td style='width:23%'><?php echo $row["question"] ?></td>
+                <td><?php echo $row["question"] ?></td>
 
                 <?php
                 if (($row["opt1"]) == Null) {
@@ -53,7 +53,7 @@ class Quiz
                     <?php } else { ?>
                         
                     <td>
-                        <div>
+                        <div style="margin:15px 0;">
                             <?php echo $row["opt1"] ?>
                         </div>
                         <button id='del' data-id=<?php echo $row["qno"] ?>>Remove</button> 
@@ -74,16 +74,18 @@ class Quiz
                     <?php } else { ?>
 
                     <td>
-                        <div>
+                        <div style="margin:15px 0;">
                             <?php echo $row["opt2"] ?>
-                        </div> <button id='del' data-id=<?php echo $row["qno"] ?>>Remove</button> <button id='chng' data-id=<?php echo $row["qno"] ?>>Edit</button> <button id='correctans' data-id=<?php echo $row["qno"] ?>>Answer</button>
+                        </div> <button id='del' data-id=<?php echo $row["qno"] ?>>Remove</button>
+                         <button id='chng' data-id=<?php echo $row["qno"] ?>>Edit</button> 
+                         <button id='correctans' data-id=<?php echo $row["qno"] ?>>Answer</button>
                     </td>
 
                     <?php } if (($row["opt3"]) == Null) { ?>
                         
                     <td>
                         <div class='input-group w-100 option'>
-                            <input type='radio' class='me-3 ms-3 input-group-radio ans' name='option'></input>
+                            <input type='radio' class='me-2 input-group-radio ans' name='option'></input>
                             <input type='text' width='100%' class='form-control opt' placeholder='option'>
                             <button id='add' data-id=<?php echo $row["qno"] ?>>ADD</button>
                         </div>
@@ -92,7 +94,7 @@ class Quiz
                     <?php } else { ?>
 
                     <td>
-                        <div>
+                        <div style="margin:15px 0;">
                             <?php echo $row["opt3"] ?>
                         </div>
                         <button id='del' data-id=<?php echo $row["qno"] ?>>Remove</button>
@@ -104,7 +106,7 @@ class Quiz
 
                     <td>
                         <div class='input-group w-100 option'>
-                            <input type='radio' class='me-3 ms-3 input-group-radio ans' name='option'></input>
+                            <input type='radio' class='me-2 input-group-radio ans' name='option'></input>
                             <input type='text' class='form-control opt' placeholder='option'>
                             <button id='add' data-id=<?php echo $row["qno"] ?>>ADD</button>
                         </div>
@@ -113,9 +115,11 @@ class Quiz
                     <?php } else { ?>
                         
                     <td>
-                        <div>
+                        <div style="margin:15px 0;" >
                             <?php echo $row["opt4"] ?>
-                        </div> <button id='del' data-id=<?php echo $row["qno"] ?>>Remove</button> <button id='chng' data-id=<?php echo $row["qno"] ?>>Edit</button> <button id='correctans' data-id=<?php echo $row["qno"] ?>>Answer</button>
+                        </div> <button id='del' data-id=<?php echo $row["qno"] ?>>Remove</button> 
+                        <button id='chng' data-id=<?php echo $row["qno"] ?>>Edit</button>
+                         <button id='correctans' data-id=<?php echo $row["qno"] ?>>Answer</button>
                     </td>
 
                     <?php } ?>
@@ -270,10 +274,10 @@ class Quiz
         $temp = $_SESSION['EMAIL'];
         $name = $_SESSION['NAME'];
         $val = $count . "','" . $temp;
-
+        
         $result = $this->connObj->insert('usershistory', implode("`,`", ['score', 'email']), $val);
-
-        if ($result === TRUE) { return $count;  }
+        
+        if ($result === true) { echo $count;  }
     }
     public function getHistory($arr){
 

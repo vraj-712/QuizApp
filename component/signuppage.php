@@ -1,6 +1,6 @@
 <?php
 if (isset($_SESSION["ROLE"])) {
-    header("Location:/quizapp/index.php");
+    header("Location:/quizapp/index.php",true);
 } else {
     ?>
     <!DOCTYPE html>

@@ -1,9 +1,8 @@
 <?php
-session_start();
+include("navbar.php");
 if (isset($_SESSION["ROLE"])) {
     if ($_SESSION["ROLE"] == 'admin') {
-        session_abort();
-
+            
         ?>
         <!DOCTYPE html>
         <html lang="en">
@@ -22,19 +21,20 @@ if (isset($_SESSION["ROLE"])) {
             <style>
                 .content {
                     position: relative;
-                    border: 2px solid green;
+                    border: 5px solid black;
                     width: 750px;
                     height: 450px;
                     margin: 50px auto;
                     background-color: whitesmoke;
                 }
-
+                
                 h3,
                 h4 {
-                    background-color: #212529;
+                    background-color: #414a4c;
                     color: red;
                     text-align: center;
                     padding: 5px;
+                    color: whitesmoke
                 }
 
                 .question-content {
@@ -59,29 +59,12 @@ if (isset($_SESSION["ROLE"])) {
                     padding: 7px;
                     border-radius: 10px;
                     background-color: green;
-                    border: 3px solid #212529;
+                    border: 3px solid #414a4c;
                     color: white;
                 }
 
                 textarea {
                     max-height: 150px;
-                }
-
-                th,
-                td {
-                    padding: 10px;
-                }
-
-                td {
-                    font-size: 15px;
-                    border: 2px solid black;
-                    margin: 15px;
-                }
-
-                th {
-                    font-size: 15px;
-                    color: red;
-                    background-color: aqua;
                 }
 
                 #del,
@@ -101,19 +84,16 @@ if (isset($_SESSION["ROLE"])) {
         <body>
 
             <?php
-            include("navbar.php");
-            ?>
-            <?php
             if (isset($_SESSION["ROLE"])) {
                 if ($_SESSION["ROLE"] == "admin") {
                     ?>
                     <div class="content">
-                        <h3 class="text-white">Add Questions</h3>
+                        <h3>Add Questions</h3>
                         <div class="question-content">
                             <textarea name="question" id="question" cols="50" rows="5" placeholder="Add Question Here...."
                                 fixed></textarea>
                         </div>
-                        <h4 class="text-white">Add Options</h4>
+                        <h4>Add Options</h4>
                         <div class="container me-auto ms-auto options me-auto ms-auto">
                             <div class="input-group w-50 option">
                                 <input type="radio" class="ms-3 me-3 input-group-radio ans" name="option"></input>
@@ -126,7 +106,7 @@ if (isset($_SESSION["ROLE"])) {
                         </div>
                         <button id="submitQuestion">Add Question</button>
                     </div>
-                    <table border="1" width="100%" class="tab table-bordered" id="myTable">
+                    <table border="1" width="100%" class="tab table-bordered" id="myTable" cell-spacing="5px" cell-padding="5px">
                         <tbody id="innerTable">
                         </tbody>
                     </table>
@@ -144,7 +124,52 @@ if (isset($_SESSION["ROLE"])) {
                             data:{action:'fetchAllAjax'},
                             success: function (response) {
                                 $("#innerTable").html(response);
-
+                                $("tr:first-child").css({
+                                    "text-align":"center",
+                                    "height":"65px",
+                                    "background-color":"#414a4c",
+                                    "font-size":"1.2em",
+                                })
+                                $("tr:first-child>th").css({
+                                    "color":"#f5f5f5",
+                                })
+                                $("table").css({
+                                    "border-width":"5px",
+                                })
+                                $("tr td:first-child").css({
+                                    "width":"8%",
+                                    "text-align":"center",
+                                });
+                                $("tr td:nth-child(2)").css({
+                                    "width":"20%",
+                                    "text-align":"center",
+                                    "padding":"15px",
+                                });
+                                $("tr td:nth-child(3)").css({
+                                    "width":"15%",
+                                    "text-align":"center",
+                                    "padding":"15px",
+                                });
+                                $("tr td:nth-child(4)").css({
+                                    "width":"15%",
+                                    "text-align":"center",
+                                    "padding":"15px",
+                                });
+                                $("tr td:nth-child(5)").css({
+                                    "width":"15%",
+                                    "text-align":"center",
+                                    "padding":"15px",
+                                });
+                                $("tr td:nth-child(6)").css({
+                                    "width":"15%",
+                                    "text-align":"center",
+                                    "padding":"15px",
+                                });
+                                $("tr td:nth-child(7)").css({
+                                    "width":"15%",
+                                    "text-align":"center",
+                                    "padding":"15px",
+                                });
                             }
                         });
 
@@ -287,7 +312,6 @@ if (isset($_SESSION["ROLE"])) {
         <?php
     }
     else {
-        
         header("Location:/quizapp/index.php", true);
     }
 } else {

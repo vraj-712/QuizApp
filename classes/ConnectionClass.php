@@ -59,9 +59,9 @@ class DataBase
         $result = $this->conn->query($sql);
 
         if ($result === True) {
-            return 1;
+            return true;
         } else {
-            return 0;
+            return false;
         }
 
     }

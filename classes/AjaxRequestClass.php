@@ -129,7 +129,6 @@ class Ajax extends Quiz
     public function checkQuizAjax(){
 
             $answer_arr = $_POST["user_result"];
-
             $temp = $this->checkQuiz($answer_arr);
             $to = $_SESSION["EMAIL"];
             $subject = "Your Quiz Result";
@@ -153,11 +152,11 @@ class Ajax extends Quiz
             } catch (Exception $e) {
                 echo $e;
             }
-            echo $temp;
+            return $temp;
     }
     public function checkUserAjax(){ echo $this->checkUser($this->connObj); }
 }
-$connObj = new DataBase("localhost","vraj","","quiz");
+$connObj = new DataBase("localhost","root","","quiz");
 $ajaxObj = new Ajax($connObj);
 // Comment Added In Ajax Class
 
